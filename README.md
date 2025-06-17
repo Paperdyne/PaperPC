@@ -1,6 +1,6 @@
-# The Little Python Computer
+# PaperPC
 
-[![PyPI version](https://img.shields.io/pypi/v/little-python-computer)](https://pypi.org/project/little-python-computer/)
+[![PyPI version](https://img.shields.io/pypi/v/paperpc)](https://pypi.org/project/paperpc/)
 
 A python implementation of the [Little Man Computer](https://en.wikipedia.org/wiki/Little_man_computer) meant for
 use in CI/CD (i.e. GitHub Actions) to verify student programs using the LMC ISA. This implementation uses the 
@@ -9,7 +9,7 @@ another paper computer, the [CARDIAC](https://en.wikipedia.org/wiki/CARDboard_Il
 
 ## Install
 
-This project is available via `PyPI`: `python -m pip install little-python-computer`.
+This project is available via `PyPI`: `python -m pip install paperpc`.
 
 ## ISA
 
@@ -29,7 +29,7 @@ This project is available via `PyPI`: `python -m pip install little-python-compu
 
 ## Using the program
 
-Invoke the package via the CLI script: `lpc example.lpc --inputs 2,3`
+Invoke the package via the CLI script: `paperpc example.ppc --inputs 2,3`
 
 Here, add the command flag `--inputs` after the name of the script followed by a comma-separated list of values to include as 
 inputs to the machine. The program will parse the correct input when encountering the `901` instruction. Think of it like
