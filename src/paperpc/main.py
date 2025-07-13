@@ -7,6 +7,7 @@ from itertools import islice
 from rich.console import Console
 from rich.table import Table
 
+# TODO: Only show graphical table if error?
 def debug_log(acc, storage) -> None:
     console = Console()
     table = Table(title = "Memory Table", row_styles = ["dim",""])

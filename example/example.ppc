@@ -1,0 +1,7 @@
+1    901    @ Read one value from input to Accumulator
+2    360    @ Store in memory location 060
+3    901    @ Read one value from input to Accumulator
+4    648    @ Unconditional branch to data in 048
+48   160    @ Add data in 060 to Accumulator
+49   902    @ Output the sum stored in the Accumulator
+50   000    @ Halt

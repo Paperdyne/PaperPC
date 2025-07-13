@@ -70,8 +70,12 @@ class Commands:
             "8": {"cmd": self.__brp, "cycles": 2},
             "901": {"cmd": self.__inp, "cycles": 1},
             "902": {"cmd": self.__out, "cycles": 1},
+            "903": {"cmd": self.__push, "cycles": 1},
+            "904": {"cmd": self.__pop, "cycles": 1},
             "0": {"cmd": self.__hlt, "cycles": 0}
         }
+        self.stack = []
+        self.stack_start = 80
         self._show_speed = show_speed
         self._total_clock = 0
 
@@ -130,6 +134,22 @@ class Commands:
             storage._counter = self._val
         else:
             storage._counter += 1
+
+    @storage
+    def __push(self, acc, storage):
+        stack_len = len(self.stack)
+        stack_pos = self.stack_start + stack_len
+        self.stack.append(acc.value)
+
+    @storage
+    def __pop(self, acc, storage):
+        stack_len = len(self.stack)
+        stack_pos = self.stack_start + stack_len
+        acc.value = int(self.stack.pop())
+
+    @storage
+    def __ptr(self, acc, storage):
+        pass
 
     @manipulate
     def __sft(self, acc, storage):

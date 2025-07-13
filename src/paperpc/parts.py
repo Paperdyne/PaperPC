@@ -13,7 +13,12 @@ class Storage:
                 r"\s{2,}|\t{1,}",
                 instruction
             ) for instruction in instructions)
-        self._expected_inputs = 0
+        self._expected_inputs = len(
+            [
+                instruction for instruction in self._program
+                if len(instruction) == 3 and instruction[1] == "901"
+            ]
+        )
         self.__initialize_storage()
 
     def __initialize_storage(self):
@@ -23,10 +28,9 @@ class Storage:
         self._spaces = deque(maxlen=100)
         for _ in range(100):
             self._spaces.append(None)
+        print(self._program)
         for instruction in self._program:
             self._spaces[int(instruction[0])] = instruction[1]
-            #if instruction[1] == "901":
-            #    self._expected_inputs += 1
             try:
                 comment = str(instruction[2])
                 if not comment.startswith("@"):
