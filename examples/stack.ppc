@@ -1,0 +1,8 @@
+1   901     @ Take an input
+2   903     @ Push it to the stack
+3   901     @ Take another input
+4   903     @ Push another to stack
+5   904     @ Pop the 002 to the ACC
+6   901     @ Take an input to oblitesrate
+7   903     @ Push new value to stack
+8   000     @ Halt

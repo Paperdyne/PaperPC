@@ -13,22 +13,23 @@ class Storage:
                 r"\s{2,}|\t{1,}",
                 instruction
             ) for instruction in instructions)
+        # Apparently, must initialize storage here; if we wait until the
+        # end of the constructor, the program is...blank?
+        self.__initialize_storage()
         self._expected_inputs = len(
             [
                 instruction for instruction in self._program
                 if len(instruction) == 3 and instruction[1] == "901"
             ]
         )
-        self.__initialize_storage()
 
     def __initialize_storage(self):
-        # This implementation follows the accepted solution from SO:
-        # https://stackoverflow.com/questions/5944708/how-can-i-automatically-limit-the-length-of-a-list-as-new-elements-are-added
+        # This implementation follows the accepted solution from
+        # SO question no. 5944708
         line = 1
-        self._spaces = deque(maxlen=100)
+        self._spaces = deque(maxlen = 100)
         for _ in range(100):
             self._spaces.append(None)
-        print(self._program)
         for instruction in self._program:
             self._spaces[int(instruction[0])] = instruction[1]
             try:
@@ -80,6 +81,10 @@ class Accumulator:
 class Inputs:
 
     def __init__(self, inputs):
-        if type(inputs) == int:
-            inputs = [inputs]
-        self._values = list(inputs)
+        try:
+            if type(inputs) == int:
+                inputs = [inputs]
+            self._values = list(inputs)
+        except TypeError:
+            print("[ERROR] Program expects inputs, but none given.")
+            sys.exit(1)

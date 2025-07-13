@@ -75,7 +75,9 @@ class Commands:
             "0": {"cmd": self.__hlt, "cycles": 0}
         }
         self.stack = []
-        self.stack_start = 80
+        self.stack_base = 80
+        self.stack_size = 18
+        self.stack_ptr = self.stack_base
         self._show_speed = show_speed
         self._total_clock = 0
 
@@ -138,14 +140,20 @@ class Commands:
     @storage
     def __push(self, acc, storage):
         stack_len = len(self.stack)
-        stack_pos = self.stack_start + stack_len
+        self.stack_ptr = self.stack_base + stack_len
+        if self.stack_ptr > self.stack_ptr + self.stack_size:
+            print("[ERROR] Stack overflow!")
+            sys.exit(1)
+        storage._spaces[self.stack_ptr] = acc.value
         self.stack.append(acc.value)
 
     @storage
     def __pop(self, acc, storage):
         stack_len = len(self.stack)
-        stack_pos = self.stack_start + stack_len
+        stack_pos = self.stack_base + stack_len
+        storage._spaces[self.stack_ptr] = "---"
         acc.value = int(self.stack.pop())
+        self.stack_ptr -= 1
 
     @storage
     def __ptr(self, acc, storage):

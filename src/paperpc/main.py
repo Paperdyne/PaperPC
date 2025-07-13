@@ -7,7 +7,6 @@ from itertools import islice
 from rich.console import Console
 from rich.table import Table
 
-# TODO: Only show graphical table if error?
 def debug_log(acc, storage) -> None:
     console = Console()
     table = Table(title = "Memory Table", row_styles = ["dim",""])
@@ -21,7 +20,6 @@ def debug_log(acc, storage) -> None:
     console.print(f"ACC VALUE: {acc.value}")
 
 def main() -> None:
-
     # Load instruction set, crash out
     # if set does not exist as file
     try:
@@ -30,6 +28,7 @@ def main() -> None:
         print("Invalid source file.")
         sys.exit(1)
     with open(src, "r") as fh:
+        # Allow for inconsistent lineation in program input
         data = [val.strip() for val in fh.readlines() if val.strip()]
 
     # Initialize accumulator
@@ -50,6 +49,7 @@ def main() -> None:
     # comma-separated list
     inputs = Inputs(cliarg.optional.inputs)
     len_inputs = len(inputs._values)
+
     # Step through instruction list, translate to
     # functions
     while True:
