@@ -72,7 +72,8 @@ class Commands:
             "902": {"cmd": self.__out, "cycles": 1},
             "903": {"cmd": self.__push, "cycles": 1},
             "904": {"cmd": self.__pop, "cycles": 1},
-            "0": {"cmd": self.__hlt, "cycles": 0}
+            "000": {"cmd": self.__hlt, "cycles": 0},
+            "0": {"cmd": self.__ptr, "cycles": 2}
         }
         self.stack = []
         self.stack_base = 80
@@ -90,6 +91,8 @@ class Commands:
             pass
         except:
             print(f"[ERROR] Invalid instruction at line {self._line}.")
+        # TODO: Create caveat for opcode 0 similar to opcode 9; "000" is
+        #       specifically HALT, while all other uses are pointers
         if self._arg == "9":
             self._arg = kwargs['arg']
         try:
