@@ -37,15 +37,7 @@ values in the range starting at the stack pointer base, `080`. The stack overflo
 increments above `098`.
 
 In future releases, this will be configurable (e.g. a configuration file can remap, increase, or decrease the stack
-size). This is planned, but not yet implemented as a `.ppconfig` file, existing on a per-project or global basis.
-
-## Pointers
-
-The PaperPC also features a crude implemention of computational pointers. Given that there exists no storage 000,
-the ISA uses the `0` opcode (e.g.`001-099`) to create a reference to memory located at the cell referenced (e.g.
-`074` will reference and attempt to execute the value at storage `074` as an "instruction" word). The example in
-[examples/pointers.ppc](examples/pointers.ppc) implements a trick that treats values as both "instruction" and
-"data" words.
+size). This is planned, but not yet implemented as a `.ppconfig` file, existing on a per-project basis.
 
 ## Using the program
 

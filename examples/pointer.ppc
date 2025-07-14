@@ -1,4 +1,0 @@
-1   901     @ Take an input
-2   014     @ Load and execute storage 014
-3   000     @ Halt
-14  902     @ Output the number
