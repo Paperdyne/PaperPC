@@ -8,20 +8,18 @@ class Storage:
         # Split into line numbers and instructions using the 2+ spaces
         # rule to define separation between lines, instructions, comments
         self._counter = 1
-        self._program = (
+        self._program = list(
             re.split(
                 r"\s{2,}|\t{1,}",
                 instruction
             ) for instruction in instructions)
         # Apparently, must initialize storage here; if we wait until the
         # end of the constructor, the program is...blank?
+        self._expected_inputs = len([
+            instruction for instruction
+            in self._program if instruction[1] == "901"
+        ])
         self.__initialize_storage()
-        self._expected_inputs = len(
-            [
-                instruction for instruction in self._program
-                if len(instruction) == 3 and instruction[1] == "901"
-            ]
-        )
 
     def __initialize_storage(self):
         # This implementation follows the accepted solution from

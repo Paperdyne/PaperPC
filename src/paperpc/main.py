@@ -52,6 +52,7 @@ def main() -> None:
 
     # Step through instruction list, translate to
     # functions
+
     while True:
 
         cmd = commands.parse(
@@ -64,7 +65,7 @@ def main() -> None:
         if 'inputs' in arg_types:
             try:
                 cmd(acc, storage, inputs._values.pop(0))
-            except IndexError:
+            except IndexError as e:
                 # This is the last case to consider
                 print(f"[ERROR] Reached end of inputs.")
                 print(f"        Expected:\t{storage._expected_inputs}")

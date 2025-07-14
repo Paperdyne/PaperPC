@@ -91,11 +91,14 @@ class Commands:
             pass
         except:
             print(f"[ERROR] Invalid instruction at line {self._line}.")
-        # TODO: Create caveat for opcode 0 similar to opcode 9; "000" is
-        #       specifically HALT, while all other uses are pointers
         if self._arg == "9":
             self._arg = kwargs['arg']
         try:
+            # Carve out specific escape for HALT instruction; the following
+            # is always true
+            if self._arg == "0" and self._val == 0:
+                # The command must be a HALT instruction
+                self._arg = "000"
             self._total_clock += self._syntax[self._arg]["cycles"]
             return self._syntax[self._arg]["cmd"]
         except:
@@ -185,7 +188,6 @@ class Commands:
 
     @inputs
     def __inp(self, acc, storage, input: int = 0):
-        storage._expected_inputs += 1
         try:
             int(input)
             if input > 999:
