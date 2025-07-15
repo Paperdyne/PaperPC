@@ -6,4 +6,6 @@
 6   903     @ Push new value to stack
 7   901     @ Take in another value to overflow
 8   903     @ Push new value to stack
-9   000     @ Halt
+9   905     @ Get the stack pointer value
+10  902     @ Output the value
+11  000     @ Halt
