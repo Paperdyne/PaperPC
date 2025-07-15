@@ -2,6 +2,7 @@ import sys
 
 from .parts import *
 from .cmd import *
+from .config import *
 from arglite import parser as cliarg
 from itertools import islice
 from rich.console import Console
@@ -31,11 +32,14 @@ def main() -> None:
         # Allow for inconsistent lineation in program input
         data = [val.strip() for val in fh.readlines() if val.strip()]
 
+    # Load settings
+    config = Config()
+
     # Initialize accumulator
     acc = Accumulator()
 
     # Set up storage for individual instructions
-    storage = Storage(data)
+    storage = Storage(data, config)
 
     # Trigger debug output if debug flag set
     if cliarg.optional.debug:

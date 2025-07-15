@@ -75,10 +75,6 @@ class Commands:
             "000": {"cmd": self.__hlt, "cycles": 0},
             "0": {"cmd": self.__ptr, "cycles": 2}
         }
-        self.stack = []
-        self.stack_base = 80
-        self.stack_size = 18
-        self.stack_ptr = self.stack_base
         self._show_speed = show_speed
         self._total_clock = 0
 
@@ -145,21 +141,21 @@ class Commands:
 
     @storage
     def __push(self, acc, storage):
-        stack_len = len(self.stack)
-        self.stack_ptr = self.stack_base + stack_len
-        if self.stack_ptr > self.stack_ptr + self.stack_size:
+        stack_len = len(storage.stack)
+        storage.stack_ptr = storage.stack_base + stack_len
+        storage.stack.append(acc.value)
+        if storage.stack_ptr - storage.stack_base > storage.stack_size:
             print("[ERROR] Stack overflow!")
             sys.exit(1)
-        storage._spaces[self.stack_ptr] = acc.value
-        self.stack.append(acc.value)
+        storage._spaces[storage.stack_ptr] = acc.value
 
     @storage
     def __pop(self, acc, storage):
-        stack_len = len(self.stack)
-        stack_pos = self.stack_base + stack_len
-        storage._spaces[self.stack_ptr] = "---"
-        acc.value = int(self.stack.pop())
-        self.stack_ptr -= 1
+        stack_len = len(storage.stack)
+        stack_pos = storage.stack_base + stack_len
+        storage._spaces[storage.stack_ptr] = "---"
+        acc.value = int(storage.stack.pop())
+        storage.stack_ptr -= 1
 
     @storage
     def __ptr(self, acc, storage):

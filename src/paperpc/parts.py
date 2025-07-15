@@ -4,10 +4,14 @@ from collections import deque
 
 class Storage:
 
-    def __init__(self, instructions):
+    def __init__(self, instructions, config):
         # Split into line numbers and instructions using the 2+ spaces
         # rule to define separation between lines, instructions, comments
         self._counter = 1
+        self.stack = []
+        self.stack_base = config.storage["stack_base"] or 80
+        self.stack_size = config.storage["stack_size"] or 18
+        self.stack_ptr = self.stack_base
         self._program = list(
             re.split(
                 r"\s{2,}|\t{1,}",

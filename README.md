@@ -37,7 +37,7 @@ values in the range starting at the stack pointer base, `080`. The stack overflo
 increments above `098`.
 
 In future releases, this will be configurable (e.g. a configuration file can remap, increase, or decrease the stack
-size). This is planned, but not yet implemented as a `.ppconfig` file, existing on a per-project basis.
+size). This is planned, but not yet implemented as a `.pcconfig` file, existing on a per-project basis.
 
 ## Using the program
 

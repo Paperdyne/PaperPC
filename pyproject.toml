@@ -6,7 +6,8 @@ build-backend = "setuptools.build_meta:__legacy__"
 name = "PaperPC"
 version = "0.3.0"
 dependencies = [
-    "arglite"
+    "arglite",
+    "pyyaml"
 ]
 authors = [
     {name = "Douglas Luman", email = "dluman@allegheny.edu"}
