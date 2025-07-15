@@ -4,29 +4,36 @@ from collections import deque
 
 class Storage:
 
-    def __init__(self, instructions):
+    def __init__(self, instructions, config):
         # Split into line numbers and instructions using the 2+ spaces
         # rule to define separation between lines, instructions, comments
         self._counter = 1
-        self._program = (
+        self.stack = []
+        self.stack_base = config.storage["stack_base"] or 80
+        self.stack_size = config.storage["stack_size"] or 18
+        self.stack_ptr = self.stack_base
+        self._program = list(
             re.split(
                 r"\s{2,}|\t{1,}",
                 instruction
             ) for instruction in instructions)
-        self._expected_inputs = 0
+        # Apparently, must initialize storage here; if we wait until the
+        # end of the constructor, the program is...blank?
+        self._expected_inputs = len([
+            instruction for instruction
+            in self._program if instruction[1] == "901"
+        ])
         self.__initialize_storage()
 
     def __initialize_storage(self):
-        # This implementation follows the accepted solution from SO:
-        # https://stackoverflow.com/questions/5944708/how-can-i-automatically-limit-the-length-of-a-list-as-new-elements-are-added
+        # This implementation follows the accepted solution from
+        # SO question no. 5944708
         line = 1
-        self._spaces = deque(maxlen=100)
+        self._spaces = deque(maxlen = 100)
         for _ in range(100):
             self._spaces.append(None)
         for instruction in self._program:
             self._spaces[int(instruction[0])] = instruction[1]
-            #if instruction[1] == "901":
-            #    self._expected_inputs += 1
             try:
                 comment = str(instruction[2])
                 if not comment.startswith("@"):
@@ -76,6 +83,10 @@ class Accumulator:
 class Inputs:
 
     def __init__(self, inputs):
-        if type(inputs) == int:
-            inputs = [inputs]
-        self._values = list(inputs)
+        try:
+            if type(inputs) == int:
+                inputs = [inputs]
+            self._values = list(inputs)
+        except TypeError:
+            print("[ERROR] Program expects inputs, but none given.")
+            sys.exit(1)

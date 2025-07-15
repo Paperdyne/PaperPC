@@ -70,7 +70,12 @@ class Commands:
             "8": {"cmd": self.__brp, "cycles": 2},
             "901": {"cmd": self.__inp, "cycles": 1},
             "902": {"cmd": self.__out, "cycles": 1},
-            "0": {"cmd": self.__hlt, "cycles": 0}
+            "903": {"cmd": self.__push, "cycles": 1},
+            "904": {"cmd": self.__pop, "cycles": 2},
+            "905": {"cmd": self.__ptr, "cycles": 2},
+            "906": {"cmd": self.__shi, "cycles": 3},
+            "000": {"cmd": self.__hlt, "cycles": 0},
+            "0": {"cmd": self.__ptr, "cycles": 2}
         }
         self._show_speed = show_speed
         self._total_clock = 0
@@ -87,6 +92,11 @@ class Commands:
         if self._arg == "9":
             self._arg = kwargs['arg']
         try:
+            # Carve out specific escape for HALT instruction; the following
+            # is always true
+            if self._arg == "0" and self._val == 0:
+                # The command must be a HALT instruction
+                self._arg = "000"
             self._total_clock += self._syntax[self._arg]["cycles"]
             return self._syntax[self._arg]["cmd"]
         except:
@@ -131,6 +141,32 @@ class Commands:
         else:
             storage._counter += 1
 
+    @storage
+    def __push(self, acc, storage):
+        stack_len = len(storage.stack)
+        storage.stack_ptr = storage.stack_base + stack_len
+        storage.stack.append(acc.value)
+        if storage.stack_ptr - storage.stack_base > storage.stack_size:
+            print("[ERROR] Stack overflow!")
+            sys.exit(1)
+        storage._spaces[storage.stack_ptr] = acc.value
+
+    @storage
+    def __pop(self, acc, storage):
+        stack_len = len(storage.stack)
+        stack_pos = storage.stack_base + stack_len
+        storage._spaces[storage.stack_ptr] = "---"
+        acc.value = int(storage.stack.pop())
+        storage.stack_ptr -= 1
+
+    @storage
+    def __ptr(self, acc, storage):
+        acc.value = int(storage.stack_ptr)
+
+    @storage
+    def __shi(self, acc, storage):
+        acc.value = len(storage.stack)
+
     @manipulate
     def __sft(self, acc, storage):
         self._val = str(self._val).zfill(2)
@@ -154,7 +190,6 @@ class Commands:
 
     @inputs
     def __inp(self, acc, storage, input: int = 0):
-        storage._expected_inputs += 1
         try:
             int(input)
             if input > 999:

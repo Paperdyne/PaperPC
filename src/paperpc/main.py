@@ -2,6 +2,7 @@ import sys
 
 from .parts import *
 from .cmd import *
+from .config import *
 from arglite import parser as cliarg
 from itertools import islice
 from rich.console import Console
@@ -20,7 +21,6 @@ def debug_log(acc, storage) -> None:
     console.print(f"ACC VALUE: {acc.value}")
 
 def main() -> None:
-
     # Load instruction set, crash out
     # if set does not exist as file
     try:
@@ -29,13 +29,17 @@ def main() -> None:
         print("Invalid source file.")
         sys.exit(1)
     with open(src, "r") as fh:
+        # Allow for inconsistent lineation in program input
         data = [val.strip() for val in fh.readlines() if val.strip()]
+
+    # Load settings
+    config = Config()
 
     # Initialize accumulator
     acc = Accumulator()
 
     # Set up storage for individual instructions
-    storage = Storage(data)
+    storage = Storage(data, config)
 
     # Trigger debug output if debug flag set
     if cliarg.optional.debug:
@@ -49,8 +53,10 @@ def main() -> None:
     # comma-separated list
     inputs = Inputs(cliarg.optional.inputs)
     len_inputs = len(inputs._values)
+
     # Step through instruction list, translate to
     # functions
+
     while True:
 
         cmd = commands.parse(
@@ -63,7 +69,7 @@ def main() -> None:
         if 'inputs' in arg_types:
             try:
                 cmd(acc, storage, inputs._values.pop(0))
-            except IndexError:
+            except IndexError as e:
                 # This is the last case to consider
                 print(f"[ERROR] Reached end of inputs.")
                 print(f"        Expected:\t{storage._expected_inputs}")

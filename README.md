@@ -25,7 +25,21 @@ This project is available via `PyPI`: `python -m pip install paperpc`.
 |`8xx`          |`BRP`               |`BRANCH IF POSITIVE`| Verifies `Accumulator` value is greater than `0`; if so, set `Program Counter` to value `xx`, prepare to execute value in `xx` |`No` |
 |`901`          |`INP`               |`INPUT`     |Read a single value fromw waiting input, replace `Accumulator` value|`Yes` |
 |`902`          |`OUT`               |`OUTPUT`    |Output the current value of the `Accumulator`|`No` |
-|`000`          |`HLT`               |`HALT`      |Terminates program |
+|`903`          |`PSH`               |`PUSH`      |Push a value to the machine's dedicated stack (080) |`No` |
+|`904`          |`POP`               |`POP`       |Pop a value from the machine's dedicated stack |`Yes` |
+|`905`          |`PTR`               |`STACK POINTER`|Retrieves and loads the current stack pointer to the `Accumulator`|`Yes` |
+|`906`          |`SHI`               |`STACK HEIGHT` |Calculates and places the current stack height in the `Accumulator`|`Yes` |
+|`000`          |`HLT`               |`HALT`      |Terminates program |`No` |
+
+### The stack
+
+The PaperPC stack starts at storage `080`. It occupies 18 spaces (limit `098`). This memory range may be used by
+general heap operations (i.e. values can be assigned to this range). However, any stack operation will overwrite
+values in the range starting at the stack pointer base, `080`. The stack overflows if the value of the stack pointer
+increments above `098`.
+
+In future releases, this will be configurable (e.g. a configuration file can remap, increase, or decrease the stack
+size). This is planned, but not yet implemented as a `.pcconfig` file, existing on a per-project basis.
 
 ## Using the program
 
