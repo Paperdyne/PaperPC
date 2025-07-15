@@ -25,9 +25,10 @@ This project is available via `PyPI`: `python -m pip install paperpc`.
 |`8xx`          |`BRP`               |`BRANCH IF POSITIVE`| Verifies `Accumulator` value is greater than `0`; if so, set `Program Counter` to value `xx`, prepare to execute value in `xx` |`No` |
 |`901`          |`INP`               |`INPUT`     |Read a single value fromw waiting input, replace `Accumulator` value|`Yes` |
 |`902`          |`OUT`               |`OUTPUT`    |Output the current value of the `Accumulator`|`No` |
-|`903`          |`PSH`               |`PUSH`      |Push a value to the machine's dedicated stack (080) |
-|`904`          |`POP`               |`POP`       |Pop a value from the machine's dedicated stack |
-|`000`          |`HLT`               |`HALT`      |Terminates program |
+|`903`          |`PSH`               |`PUSH`      |Push a value to the machine's dedicated stack (080) |`No`|
+|`904`          |`POP`               |`POP`       |Pop a value from the machine's dedicated stack |`Yes`|
+|`905`          |`PTR`               |`STACK POINTER`|Retrieves and loads the current stack pointer to the `Accumulator`|`Yes`|
+|`000`          |`HLT`               |`HALT`      |Terminates program |`No`|
 
 ### The stack
 
