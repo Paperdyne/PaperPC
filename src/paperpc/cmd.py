@@ -73,6 +73,7 @@ class Commands:
             "903": {"cmd": self.__push, "cycles": 1},
             "904": {"cmd": self.__pop, "cycles": 2},
             "905": {"cmd": self.__ptr, "cycles": 2},
+            "906": {"cmd": self.__shi, "cycles": 3},
             "000": {"cmd": self.__hlt, "cycles": 0},
             "0": {"cmd": self.__ptr, "cycles": 2}
         }
@@ -161,6 +162,10 @@ class Commands:
     @storage
     def __ptr(self, acc, storage):
         acc.value = int(storage.stack_ptr)
+
+    @storage
+    def __shi(self, acc, storage):
+        acc.value = len(storage.stack)
 
     @manipulate
     def __sft(self, acc, storage):
