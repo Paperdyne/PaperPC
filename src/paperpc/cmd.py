@@ -22,7 +22,7 @@ def generic(f):
         if not f.__name__.startswith("__b"):
             args[2]._counter += 1
         else:
-            args[2]._spaces[99] = args[2]._counter + 1
+            args[2]._spaces[len(args[2]._spaces) - 1] = args[2]._counter + 1
         return f(*args, **kwargs)
     return wrapper
 
@@ -117,7 +117,13 @@ class Commands:
 
     @storage
     def __sta(self, acc, storage):
-        storage._spaces[self._val] = str(acc.value)[-3:]
+        try:
+            storage._spaces[self._val] = str(acc.value)[-3:]
+        except IndexError:
+            print(f"""
+[ERROR] Program attempted to store in {self._val}, but last available
+       space is {len(storage._spaces) - 1}.""")
+            sys.exit(1)
 
     @storage
     def __lda(self, acc, storage):

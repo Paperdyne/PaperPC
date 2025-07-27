@@ -9,8 +9,11 @@ class Storage:
         # rule to define separation between lines, instructions, comments
         self._counter = 1
         self.stack = []
-        self.stack_base = config.storage["stack_base"] or 80
-        self.stack_size = config.storage["stack_size"] or 18
+        # Sensible defaults based on the new paper version; this hella
+        # violates pylint
+        self.stack_base = config.storage["stack_base"] if "stack_base" in config.storage else 80
+        self.stack_size = config.storage["stack_size"] if "stack_size" in config.storage else 18
+        self.storage_size = config.storage["memory_size"] if "memory_size" in config.storage else 60
         self.stack_ptr = self.stack_base
         self._program = list(
             re.split(
@@ -29,8 +32,8 @@ class Storage:
         # This implementation follows the accepted solution from
         # SO question no. 5944708
         line = 1
-        self._spaces = deque(maxlen = 100)
-        for _ in range(100):
+        self._spaces = deque(maxlen = self.storage_size)
+        for _ in range(self.storage_size):
             self._spaces.append(None)
         for instruction in self._program:
             self._spaces[int(instruction[0])] = instruction[1]
@@ -86,6 +89,11 @@ class Inputs:
         try:
             if type(inputs) == int:
                 inputs = [inputs]
+            if type(inputs) == str:
+                inputs = [
+                    int(inp) for inp
+                    in inputs.split(",").strip()
+                ]
             self._values = list(inputs)
         except TypeError:
             print("[ERROR] Program expects inputs, but none given.")
