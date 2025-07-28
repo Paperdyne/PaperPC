@@ -1,24 +1,33 @@
+import os
 import sys
 
 from .parts import *
 from .cmd import *
 from .config import *
 from arglite import parser as cliarg
+
+from io import StringIO
 from itertools import islice
 from rich.console import Console
 from rich.table import Table
 
-def debug_log(acc, storage) -> None:
-    console = Console()
+def debug_log(console, acc, storage, output = "") -> None:
     table = Table(title = "Memory Table", row_styles = ["dim",""])
-    for _ in range(0, 100, 10):
+    for _ in range(0, len(storage._spaces), 10):
         table.add_column(f"{_} - {_ + 9}")
     for _ in range(0, 10):
-        row = list(storage._spaces)[_::10]
-        row = [str(val).zfill(3) if val else "---" for val in row]
+        spaces = list(storage._spaces)
+        spaces[storage._counter] = f"> {spaces[storage._counter]}"
+        row = [str(val).zfill(3) if val else "---" for val in spaces[_::10]]
         table.add_row(*row)
+    # Set up table
+    line_no = storage._counter
+    instruction = storage.retrieve(storage._counter)
+    os.system("clear || cls")
     console.print(table)
-    console.print(f"ACC VALUE: {acc.value}")
+    console.print(f"  ACC VALUE: {acc.value}\tPC VALUE: {line_no}\tCMD: {instruction}\tOUTPUT: {output}")
+    # Ask for input to advance the table
+    input()
 
 def main() -> None:
     # Load instruction set, crash out
@@ -43,7 +52,8 @@ def main() -> None:
 
     # Trigger debug output if debug flag set
     if cliarg.optional.debug:
-        debug_log(acc, storage)
+        console = Console()
+        debug_log(console, acc, storage)
 
     # Prepare the ISA
     commands = Commands(cliarg.optional.speed)
@@ -58,7 +68,10 @@ def main() -> None:
     # functions
 
     while True:
-
+        if cliarg.optional.debug:
+            stdout = sys.stdout
+            output = StringIO()
+            sys.stdout = output
         cmd = commands.parse(
             line = storage._counter,
             arg = storage.retrieve(storage._counter)
@@ -76,11 +89,12 @@ def main() -> None:
                 print(f"        Given:\t\t{len_inputs}")
                 sys.exit(1)
         else:
-            if cliarg.optional.debug:
-                debug_log(acc, storage)
             status = cmd(acc, storage)
             if status == False:
                 break
+        if cliarg.optional.debug:
+            sys.stdout = stdout
+            debug_log(console, acc, storage, output.getvalue())
 
 if __name__ == "__main__":
     main()

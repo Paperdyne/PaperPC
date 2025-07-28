@@ -10,14 +10,19 @@ class Config:
             for filename in fnmatch.filter(filenames, ".pcconfig"):
                 config_file = f"{root}/{filename}"
                 break
+        config = {}
         try:
             with open(config_file, "r") as fh:
                 config = yaml.safe_load(fh)
-                self.__set_settings(config)
         except TypeError:
             # No config, so just move on
             pass
+        self.__set_settings(config)
 
-    def __set_settings(self, config):
+    def __set_settings(self, config: dict = {}):
+        # TODO: Need better way to handle non-extant
+        #       configuration file
+        if "storage" not in config:
+            config["storage"] = {}
         for setting in config:
             setattr(self, setting, config[setting])

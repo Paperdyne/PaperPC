@@ -1,0 +1,6 @@
+modules:
+    paperpc:
+        args:
+            - examples/example.ppc
+            - --inputs [2,3]
+        outcome: 5
