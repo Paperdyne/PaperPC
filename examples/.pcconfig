@@ -1,3 +1,3 @@
 storage:
     stack_size: 18
-    stack_base: 80
+    stack_base: 50

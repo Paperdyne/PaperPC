@@ -8,6 +8,8 @@
 8   903     @ Push new value to stack
 9   905     @ Get the stack pointer value
 10  902     @ Output the value
-11  906     @ Calculate the stack height
-12  902     @ Output the value
-13  000     @ Halt
+11  904     @ Pop the last value off the stack
+12  902     @ Print that value
+13  906     @ Calculate the stack height
+14  902     @ Output the value
+15  000     @ Halt

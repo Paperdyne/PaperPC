@@ -155,15 +155,23 @@ class Commands:
         if storage.stack_ptr - storage.stack_base > storage.stack_size:
             print("[ERROR] Stack overflow!")
             sys.exit(1)
-        storage._spaces[storage.stack_ptr] = acc.value
+        try:
+            storage._spaces[storage.stack_ptr] = acc.value
+        except IndexError:
+            print(f"[ERROR] Stack pointer set beyond storage limit!")
+            sys.exit(1)
 
     @storage
     def __pop(self, acc, storage):
         stack_len = len(storage.stack)
         stack_pos = storage.stack_base + stack_len
         storage._spaces[storage.stack_ptr] = "---"
-        acc.value = int(storage.stack.pop())
-        storage.stack_ptr -= 1
+        try:
+            acc.value = int(storage.stack.pop())
+            storage.stack_ptr -= 1
+        except IndexError:
+            print(f"[ERROR] Stack pointer set beyond storage limit!")
+            sys.exit(1)
 
     @storage
     def __ptr(self, acc, storage):
